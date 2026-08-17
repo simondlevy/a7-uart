@@ -1,0 +1,15 @@
+module uart_echo (
+    input  wire clk,      // 12 MHz clock on Cmod A7
+    input  wire uart_rx,  // USB-UART RX
+    output wire uart_tx   // USB-UART TX
+);
+    // 12MHz / 115200 baud = 104 cycles per bit
+    parameter CLKS_PER_BIT = 104; 
+
+    reg [7:0] rx_byte = 0;
+    wire      rx_dv;
+    
+    // Simple loopback assignment for testing
+    assign uart_tx = uart_rx; 
+
+endmodule
