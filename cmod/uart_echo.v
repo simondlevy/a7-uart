@@ -6,6 +6,8 @@ module uart_echo (
     // Wire up internal RX data and valid signals from a standard UART RX/TX core
     wire [7:0] rx_byte;
     wire rx_dv;
+
+    // 12MHz / 115200 baud = 104 cycles per bit
     
     uart_rx #(.CLKS_PER_BIT(104)) UART_RX_Inst (
         .i_Clock(clk),
