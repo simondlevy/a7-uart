@@ -7,14 +7,14 @@ module uart_echo (
     wire [7:0] rx_byte;
     wire rx_dv;
     
-    uart_rx #(.CLKS_PER_BIT(1250)) UART_RX_Inst (
+    uart_rx #(.CLKS_PER_BIT(104)) UART_RX_Inst (
         .i_Clock(clk),
         .i_Rx_Serial(RsRx),
         .o_Rx_DV(rx_dv),
         .o_Rx_Byte(rx_byte)
     );
 
-    uart_tx #(.CLKS_PER_BIT(1250)) UART_TX_Inst (
+    uart_tx #(.CLKS_PER_BIT(104)) UART_TX_Inst (
         .i_Clock(clk),
         .i_Tx_DV(rx_dv),       // Echo back immediately when data is valid
         .i_Tx_Byte(rx_byte),
