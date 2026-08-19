@@ -3,9 +3,6 @@ module uart_echo (
     input  wire uart_rx,  // USB-UART RX
     output wire uart_tx   // USB-UART TX
 );
-    // 12MHz / 115200 baud = 104 cycles per bit
-    // parameter CLKS_PER_BIT = 104; 
-
     // 100MHz / 115200 baud = 868 cycles per bit
     parameter CLKS_PER_BIT = 868; 
 
