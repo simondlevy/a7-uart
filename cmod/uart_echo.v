@@ -9,14 +9,14 @@ module uart_echo (
 
     // 12MHz / 115200 baud = 104 cycles per bit
     
-    uart_rx #(.CLKS_PER_BIT(104)) UART_RX_Inst (
+    uart_rx #(.CLK_PER_BIT(104)) UART_RX_Inst (
         .i_Clock(clk),
         .i_Rx_Serial(RsRx),
         .o_Rx_DV(rx_dv),
         .o_Rx_Byte(rx_byte)
     );
 
-    uart_tx #(.CLKS_PER_BIT(104)) UART_TX_Inst (
+    uart_tx #(.CLK_PER_BIT(104)) UART_TX_Inst (
         .i_Clock(clk),
         .i_Tx_DV(rx_dv),       // Echo back immediately when data is valid
         .i_Tx_Byte(rx_byte),
@@ -26,7 +26,7 @@ module uart_echo (
 endmodule
 
 // --- UART RECEIVER MODULE ---
-module uart_rx #(parameter CLKS_PER_BIT = 1250) (
+module uart_rx #(parameter CLK_PER_BIT = 1250) (
     input        i_Clock,
     input        i_Rx_Serial,
     output       o_Rx_DV,
@@ -61,7 +61,7 @@ module uart_rx #(parameter CLKS_PER_BIT = 1250) (
                 else                   r_SM_Main <= s_IDLE;
             end
             s_RX_START_BIT : begin
-                if (r_Clk_Count == (CLKS_PER_BIT-1)/2) begin
+                if (r_Clk_Count == (CLK_PER_BIT-1)/2) begin
                     if (r_Rx_Data == 1'b0) begin
                         r_Clk_Count <= 0;
                         r_SM_Main   <= s_RX_DATA_BITS;
@@ -72,7 +72,7 @@ module uart_rx #(parameter CLKS_PER_BIT = 1250) (
                 end
             end
             s_RX_DATA_BITS : begin
-                if (r_Clk_Count < CLKS_PER_BIT-1) begin
+                if (r_Clk_Count < CLK_PER_BIT-1) begin
                     r_Clk_Count <= r_Clk_Count + 1;
                     r_SM_Main   <= s_RX_DATA_BITS;
                 end else begin
@@ -88,7 +88,7 @@ module uart_rx #(parameter CLKS_PER_BIT = 1250) (
                 end
             end
             s_RX_STOP_BIT : begin
-                if (r_Clk_Count < CLKS_PER_BIT-1) begin
+                if (r_Clk_Count < CLK_PER_BIT-1) begin
                     r_Clk_Count <= r_Clk_Count + 1;
                     r_SM_Main   <= s_RX_STOP_BIT;
                 end else begin
@@ -109,7 +109,7 @@ module uart_rx #(parameter CLKS_PER_BIT = 1250) (
 endmodule
 
 // --- UART TRANSMITTER MODULE ---
-module uart_tx #(parameter CLKS_PER_BIT = 1250) (
+module uart_tx #(parameter CLK_PER_BIT = 1250) (
     input       i_Clock,
     input       i_Tx_DV,
     input [7:0] i_Tx_Byte,
@@ -143,7 +143,7 @@ module uart_tx #(parameter CLKS_PER_BIT = 1250) (
             end
             s_TX_START_BIT : begin
                 r_Tx_Serial <= 1'b0;
-                if (r_Clk_Count < CLKS_PER_BIT-1) begin
+                if (r_Clk_Count < CLK_PER_BIT-1) begin
                     r_Clk_Count <= r_Clk_Count + 1;
                     r_SM_Main   <= s_TX_START_BIT;
                 end else begin
@@ -153,7 +153,7 @@ module uart_tx #(parameter CLKS_PER_BIT = 1250) (
             end
             s_TX_DATA_BITS : begin
                 r_Tx_Serial <= r_Tx_Data[r_Bit_Index];
-                if (r_Clk_Count < CLKS_PER_BIT-1) begin
+                if (r_Clk_Count < CLK_PER_BIT-1) begin
                     r_Clk_Count <= r_Clk_Count + 1;
                     r_SM_Main   <= s_TX_DATA_BITS;
                 end else begin
@@ -169,7 +169,7 @@ module uart_tx #(parameter CLKS_PER_BIT = 1250) (
             end
             s_TX_STOP_BIT : begin
                 r_Tx_Serial <= 1'b1;
-                if (r_Clk_Count < CLKS_PER_BIT-1) begin
+                if (r_Clk_Count < CLK_PER_BIT-1) begin
                     r_Clk_Count <= r_Clk_Count + 1;
                     r_SM_Main   <= s_TX_STOP_BIT;
                 end else begin
