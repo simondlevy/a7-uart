@@ -1,5 +1,3 @@
-// Top module for Nexys A7 UART Echo at 115200 Baud
-// Input Clock: 100 MHz (E3)
 module uart_echo (
     input  wire clk,     // 100 MHz oscillator
     input  wire rst_n,   // Reset (Active Low)
