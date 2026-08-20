@@ -7,16 +7,18 @@ module uart_echo (
     wire [7:0] rx_byte;
     wire rx_dv;
 
-    // 12MHz / 115200 baud = 104 cycles per bit
+    // Clock division for 115200 baud from 12 MHz
+    // 12MHz / 115200 baud = ~104 cycles per bit
+    localparam CLK_PER_BIT = 104;
     
-    uart_rx #(.CLK_PER_BIT(104)) UART_RX_Inst (
+    uart_rx #(.CLK_PER_BIT(CLK_PER_BIT)) UART_RX_Inst (
         .i_Clock(clk),
         .i_Rx_Serial(RsRx),
         .o_Rx_DV(rx_dv),
         .o_Rx_Byte(rx_byte)
     );
 
-    uart_tx #(.CLK_PER_BIT(104)) UART_TX_Inst (
+    uart_tx #(.CLK_PER_BIT(CLK_PER_BIT)) UART_TX_Inst (
         .i_Clock(clk),
         .i_Tx_DV(rx_dv),       // Echo back immediately when data is valid
         .i_Tx_Byte(rx_byte),
