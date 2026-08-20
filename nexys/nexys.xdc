@@ -6,5 +6,5 @@ create_clock -add -name sys_clk_pin -period 10.00 -waveform {0 5} [get_ports clk
 set_property -dict { PACKAGE_PIN C12   IOSTANDARD LVCMOS33 } [get_ports rst_n]
 
 ## USB-UART Bridge
-set_property -dict { PACKAGE_PIN C4    IOSTANDARD LVCMOS33 } [get_ports rx]
-set_property -dict { PACKAGE_PIN D4    IOSTANDARD LVCMOS33 } [get_ports tx]
+set_property -dict { PACKAGE_PIN C4    IOSTANDARD LVCMOS33 } [get_ports RsRx]
+set_property -dict { PACKAGE_PIN D4    IOSTANDARD LVCMOS33 } [get_ports RsTx]

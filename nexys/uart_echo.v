@@ -1,8 +1,8 @@
 module uart_echo (
     input  wire clk,     // 100 MHz oscillator
     input  wire rst_n,   // Reset (Active Low)
-    input  wire rx,      // FPGA RX pin (C4)
-    output wire tx       // FPGA TX pin (D4)
+    input  wire RsRx,      // FPGA RX pin (C4)
+    output wire RsTx       // FPGA TX pin (D4)
 );
 
     // Clock division for 115200 baud from 100 MHz
@@ -18,7 +18,7 @@ module uart_echo (
     uart_rx #(.CLK_PER_BIT(CLK_PER_BIT)) rx_inst (
         .clk(clk),
         .rst_n(rst_n),
-        .rx(rx),
+        .rx(RsRx),
         .rx_ready(rx_ready),
         .rx_data(rx_data)
     );
@@ -29,7 +29,7 @@ module uart_echo (
         .rst_n(rst_n),
         .tx_start(rx_ready && !tx_busy), // Trigger send when byte is received
         .tx_data(rx_data),
-        .tx(tx),
+        .tx(RsTx),
         .tx_busy(tx_busy)
     );
 
