@@ -1,6 +1,6 @@
 module uart_echo (
     input  wire clk,     // 100 MHz oscillator
-    input  wire rst_n,   // Reset (Active Low)
+    input  wire arstn,   // Reset (Active Low)
     input  wire RsRx,      // FPGA RX pin (C4)
     output wire RsTx       // FPGA TX pin (D4)
 );
@@ -17,7 +17,7 @@ module uart_echo (
     // Instantiate UART Receiver
     uart_rx #(.CLK_PER_BIT(CLK_PER_BIT)) rx_inst (
         .clk(clk),
-        .rst_n(rst_n),
+        .arstn(arstn),
         .rx(RsRx),
         .rx_ready(rx_ready),
         .rx_data(rx_data)
@@ -26,7 +26,7 @@ module uart_echo (
     // Instantiate UART Transmitter
     uart_tx #(.CLK_PER_BIT(CLK_PER_BIT)) tx_inst (
         .clk(clk),
-        .rst_n(rst_n),
+        .arstn(arstn),
         .tx_start(rx_ready && !tx_busy), // Trigger send when byte is received
         .tx_data(rx_data),
         .tx(RsTx),
@@ -38,7 +38,7 @@ endmodule
 // --- UART RECEIVER MODULE ---
 module uart_rx #(parameter CLK_PER_BIT = 868) (
     input  wire       clk,
-    input  wire       rst_n,
+    input  wire       arstn,
     input  wire       rx,
     output reg        rx_ready,
     output reg  [7:0] rx_data
@@ -53,8 +53,8 @@ module uart_rx #(parameter CLK_PER_BIT = 868) (
     reg [2:0]  bit_index = 0;
     reg [7:0]  rx_shifter= 0;
 
-    always @(posedge clk or negedge rst_n) begin
-        if (!rst_n) begin
+    always @(posedge clk or negedge arstn) begin
+        if (!arstn) begin
             state    <= STATE_IDLE;
             rx_ready <= 1'b0;
         end else begin
@@ -113,7 +113,7 @@ endmodule
 // --- UART TRANSMITTER MODULE ---
 module uart_tx #(parameter CLK_PER_BIT = 868) (
     input  wire       clk,
-    input  wire       rst_n,
+    input  wire       arstn,
     input  wire       tx_start,
     input  wire [7:0] tx_data,
     output reg        tx,
@@ -129,8 +129,8 @@ module uart_tx #(parameter CLK_PER_BIT = 868) (
     reg [2:0]  bit_index = 0;
     reg [7:0]  tx_shifter= 0;
 
-    always @(posedge clk or negedge rst_n) begin
-        if (!rst_n) begin
+    always @(posedge clk or negedge arstn) begin
+        if (!arstn) begin
             state   <= STATE_IDLE;
             tx      <= 1'b1;
             tx_busy <= 1'b0;
