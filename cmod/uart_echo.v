@@ -15,6 +15,7 @@ module uart_echo (
 
     uart_rx #(.CLK_PER_BIT(CLK_PER_BIT)) rx_inst (
         .clk(clk),
+        .arstn(!btn),
         .rx(RsRx),
         .rx_ready(rx_ready),
         .rx_data(rx_data)
@@ -32,6 +33,7 @@ endmodule
 // --- UART RECEIVER MODULE ---
 module uart_rx #(parameter CLK_PER_BIT = 104) (
     input        clk,
+    input  wire  arstn,
     input        rx,
     output       rx_ready,
     output [7:0] rx_data
