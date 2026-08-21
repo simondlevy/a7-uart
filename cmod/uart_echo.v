@@ -38,7 +38,7 @@ module uart_rx #(parameter CLK_PER_BIT = 104) (
     output       rx_ready,
     output [7:0] rx_data
 );
-    parameter S_IDLE         = 3'b000;
+    parameter STATE_IDLE         = 3'b000;
     parameter STATE_RX_START_BIT = 3'b001;
     parameter STATE_RX_DATA_BITS = 3'b010;
     parameter STATE_RX_STOP_BIT  = 3'b011;
@@ -59,19 +59,19 @@ module uart_rx #(parameter CLK_PER_BIT = 104) (
 
     always @(posedge clk) begin
         case (r_SM_Main)
-            S_IDLE : begin
+            STATE_IDLE : begin
                 r_Rx_DV     <= 1'b0;
                 clk_count <= 0;
                 r_Bit_Index <= 0;
                 if (r_Rx_Data == 1'b0) r_SM_Main <= STATE_RX_START_BIT;
-                else                   r_SM_Main <= S_IDLE;
+                else                   r_SM_Main <= STATE_IDLE;
             end
             STATE_RX_START_BIT : begin
                 if (clk_count == (CLK_PER_BIT-1)/2) begin
                     if (r_Rx_Data == 1'b0) begin
                         clk_count <= 0;
                         r_SM_Main   <= STATE_RX_DATA_BITS;
-                    end else r_SM_Main <= S_IDLE;
+                    end else r_SM_Main <= STATE_IDLE;
                 end else begin
                     clk_count <= clk_count + 1;
                     r_SM_Main   <= STATE_RX_START_BIT;
@@ -104,10 +104,10 @@ module uart_rx #(parameter CLK_PER_BIT = 104) (
                 end
             end
             STATE_CLEANUP : begin
-                r_SM_Main <= S_IDLE;
+                r_SM_Main <= STATE_IDLE;
                 r_Rx_DV   <= 1'b0;
             end
-            default : r_SM_Main <= S_IDLE;
+            default : r_SM_Main <= STATE_IDLE;
         endcase
     end
     assign rx_ready   = r_Rx_DV;
@@ -122,7 +122,7 @@ module uart_tx #(parameter CLK_PER_BIT = 104) (
     output      tx,
     output      o_Tx_Done
 );
-    parameter S_IDLE         = 3'b000;
+    parameter STATE_IDLE         = 3'b000;
     parameter STATE_TX_START_BIT = 3'b001;
     parameter STATE_TX_DATA_BITS = 3'b010;
     parameter STATE_TX_STOP_BIT  = 3'b011;
@@ -137,7 +137,7 @@ module uart_tx #(parameter CLK_PER_BIT = 104) (
 
     always @(posedge clk) begin
         case (r_SM_Main)
-            S_IDLE : begin
+            STATE_IDLE : begin
                 r_Tx_Serial   <= 1'b1;
                 r_Tx_Done     <= 1'b0;
                 clk_count   <= 0;
@@ -145,7 +145,7 @@ module uart_tx #(parameter CLK_PER_BIT = 104) (
                 if (tx_start == 1'b1) begin
                     r_Tx_Data <= tx_data;
                     r_SM_Main <= STATE_TX_START_BIT;
-                end else r_SM_Main <= S_IDLE;
+                end else r_SM_Main <= STATE_IDLE;
             end
             STATE_TX_START_BIT : begin
                 r_Tx_Serial <= 1'b0;
@@ -186,9 +186,9 @@ module uart_tx #(parameter CLK_PER_BIT = 104) (
             end
             STATE_CLEANUP : begin
                 r_Tx_Done <= 1'b1;
-                r_SM_Main <= S_IDLE;
+                r_SM_Main <= STATE_IDLE;
             end
-            default : r_SM_Main <= S_IDLE;
+            default : r_SM_Main <= STATE_IDLE;
         endcase
     end
     assign tx = r_Tx_Serial;
