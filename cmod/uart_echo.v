@@ -12,14 +12,14 @@ module uart_echo (
     localparam CLK_PER_BIT = 104;
     
     uart_rx #(.CLK_PER_BIT(CLK_PER_BIT)) UART_RX_Inst (
-        .i_Clock(clk),
+        .clk(clk),
         .i_Rx_Serial(RsRx),
         .o_Rx_DV(rx_dv),
         .o_Rx_Byte(rx_byte)
     );
 
     uart_tx #(.CLK_PER_BIT(CLK_PER_BIT)) UART_TX_Inst (
-        .i_Clock(clk),
+        .clk(clk),
         .i_Tx_DV(rx_dv),       // Echo back immediately when data is valid
         .i_Tx_Byte(rx_byte),
         .o_Tx_Serial(RsTx),
@@ -29,7 +29,7 @@ endmodule
 
 // --- UART RECEIVER MODULE ---
 module uart_rx #(parameter CLK_PER_BIT = 1250) (
-    input        i_Clock,
+    input        clk,
     input        i_Rx_Serial,
     output       o_Rx_DV,
     output [7:0] o_Rx_Byte
@@ -48,12 +48,12 @@ module uart_rx #(parameter CLK_PER_BIT = 1250) (
     reg        r_Rx_DV     = 0;
     reg [2:0]  r_SM_Main   = 0;
 
-    always @(posedge i_Clock) begin
+    always @(posedge clk) begin
         r_Rx_Data_R <= i_Rx_Serial;
         r_Rx_Data   <= r_Rx_Data_R;
     end
 
-    always @(posedge i_Clock) begin
+    always @(posedge clk) begin
         case (r_SM_Main)
             S_IDLE : begin
                 r_Rx_DV     <= 1'b0;
@@ -112,7 +112,7 @@ endmodule
 
 // --- UART TRANSMITTER MODULE ---
 module uart_tx #(parameter CLK_PER_BIT = 1250) (
-    input       i_Clock,
+    input       clk,
     input       i_Tx_DV,
     input [7:0] i_Tx_Byte,
     output      o_Tx_Serial,
@@ -131,7 +131,7 @@ module uart_tx #(parameter CLK_PER_BIT = 1250) (
     reg        r_Tx_Serial   = 1'b1;
     reg        r_Tx_Done     = 1'b0;
 
-    always @(posedge i_Clock) begin
+    always @(posedge clk) begin
         case (r_SM_Main)
             S_IDLE : begin
                 r_Tx_Serial   <= 1'b1;
