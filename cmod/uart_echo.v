@@ -21,7 +21,7 @@ module uart_echo (
 
     uart_tx #(.CLK_PER_BIT(CLK_PER_BIT)) tx_inst (
         .clk(clk),
-        .i_Tx_DV(rx_ready),       // Echo back immediately when data is valid
+        .tx_start(rx_ready),       // Echo back immediately when data is valid
         .tx_data(rx_data),
         .tx(RsTx),
         .o_Tx_Done()
@@ -114,7 +114,7 @@ endmodule
 // --- UART TRANSMITTER MODULE ---
 module uart_tx #(parameter CLK_PER_BIT = 1250) (
     input       clk,
-    input       i_Tx_DV,
+    input       tx_start,
     input [7:0] tx_data,
     output      tx,
     output      o_Tx_Done
@@ -139,7 +139,7 @@ module uart_tx #(parameter CLK_PER_BIT = 1250) (
                 r_Tx_Done     <= 1'b0;
                 clk_count   <= 0;
                 r_Bit_Index   <= 0;
-                if (i_Tx_DV == 1'b1) begin
+                if (tx_start == 1'b1) begin
                     r_Tx_Data <= tx_data;
                     r_SM_Main <= STATE_TX_START_BIT;
                 end else r_SM_Main <= S_IDLE;
