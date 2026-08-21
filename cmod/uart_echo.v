@@ -38,11 +38,11 @@ module uart_rx #(parameter CLK_PER_BIT = 104) (
     output       rx_ready,
     output [7:0] rx_data
 );
-    parameter STATE_IDLE         = 3'b000;
-    parameter STATE_RX_START_BIT = 3'b001;
-    parameter STATE_RX_DATA_BITS = 3'b010;
-    parameter STATE_RX_STOP_BIT  = 3'b011;
-    parameter STATE_CLEANUP      = 3'b100;
+    parameter STATE_IDLE    = 3'b000;
+    parameter STATE_START   = 3'b001;
+    parameter STATE_DATA    = 3'b010;
+    parameter STATE_STOP    = 3'b011;
+    parameter STATE_CLEANUP = 3'b100;
    
     reg        r_Rx_Data_R = 1'b1;
     reg        r_Rx_Data   = 1'b1;
@@ -63,40 +63,40 @@ module uart_rx #(parameter CLK_PER_BIT = 104) (
                 r_Rx_DV     <= 1'b0;
                 clk_count <= 0;
                 r_Bit_Index <= 0;
-                if (r_Rx_Data == 1'b0) r_SM_Main <= STATE_RX_START_BIT;
+                if (r_Rx_Data == 1'b0) r_SM_Main <= STATE_START;
                 else                   r_SM_Main <= STATE_IDLE;
             end
-            STATE_RX_START_BIT : begin
+            STATE_START : begin
                 if (clk_count == (CLK_PER_BIT-1)/2) begin
                     if (r_Rx_Data == 1'b0) begin
                         clk_count <= 0;
-                        r_SM_Main   <= STATE_RX_DATA_BITS;
+                        r_SM_Main   <= STATE_DATA;
                     end else r_SM_Main <= STATE_IDLE;
                 end else begin
                     clk_count <= clk_count + 1;
-                    r_SM_Main   <= STATE_RX_START_BIT;
+                    r_SM_Main   <= STATE_START;
                 end
             end
-            STATE_RX_DATA_BITS : begin
+            STATE_DATA : begin
                 if (clk_count < CLK_PER_BIT-1) begin
                     clk_count <= clk_count + 1;
-                    r_SM_Main   <= STATE_RX_DATA_BITS;
+                    r_SM_Main   <= STATE_DATA;
                 end else begin
                     clk_count          <= 0;
                     r_Rx_Byte[r_Bit_Index] <= r_Rx_Data;
                     if (r_Bit_Index < 7) begin
                         r_Bit_Index <= r_Bit_Index + 1;
-                        r_SM_Main   <= STATE_RX_DATA_BITS;
+                        r_SM_Main   <= STATE_DATA;
                     end else begin
                         r_Bit_Index <= 0;
-                        r_SM_Main   <= STATE_RX_STOP_BIT;
+                        r_SM_Main   <= STATE_STOP;
                     end
                 end
             end
-            STATE_RX_STOP_BIT : begin
+            STATE_STOP : begin
                 if (clk_count < CLK_PER_BIT-1) begin
                     clk_count <= clk_count + 1;
-                    r_SM_Main   <= STATE_RX_STOP_BIT;
+                    r_SM_Main   <= STATE_STOP;
                 end else begin
                     r_Rx_DV     <= 1'b1;
                     clk_count <= 0;
