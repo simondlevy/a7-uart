@@ -23,7 +23,7 @@ module uart_echo (
         .clk(clk),
         .i_Tx_DV(rx_ready),       // Echo back immediately when data is valid
         .i_Tx_Byte(rx_data),
-        .o_Tx_Serial(RsTx),
+        .tx(RsTx),
         .o_Tx_Done()
     );
 endmodule
@@ -116,7 +116,7 @@ module uart_tx #(parameter CLK_PER_BIT = 1250) (
     input       clk,
     input       i_Tx_DV,
     input [7:0] i_Tx_Byte,
-    output      o_Tx_Serial,
+    output      tx,
     output      o_Tx_Done
 );
     parameter S_IDLE         = 3'b000;
@@ -188,6 +188,6 @@ module uart_tx #(parameter CLK_PER_BIT = 1250) (
             default : r_SM_Main <= S_IDLE;
         endcase
     end
-    assign o_Tx_Serial = r_Tx_Serial;
+    assign tx = r_Tx_Serial;
     assign o_Tx_Done   = r_Tx_Done;
 endmodule
