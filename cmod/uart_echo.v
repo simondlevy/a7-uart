@@ -30,7 +30,7 @@ module uart_echo (
 endmodule
 
 // --- UART RECEIVER MODULE ---
-module uart_rx #(parameter CLK_PER_BIT = 1250) (
+module uart_rx #(parameter CLK_PER_BIT = 104) (
     input        clk,
     input        rx,
     output       rx_ready,
@@ -113,7 +113,7 @@ module uart_rx #(parameter CLK_PER_BIT = 1250) (
 endmodule
 
 // --- UART TRANSMITTER MODULE ---
-module uart_tx #(parameter CLK_PER_BIT = 1250) (
+module uart_tx #(parameter CLK_PER_BIT = 104) (
     input       clk,
     input       tx_start,
     input [7:0] tx_data,
