@@ -15,7 +15,7 @@ module uart_echo (
     uart_rx #(.CLK_PER_BIT(CLK_PER_BIT)) UART_RX_Inst (
         .clk(clk),
         .rx(RsRx),
-        .o_Rx_DV(rx_ready),
+        .rx_ready(rx_ready),
         .rx_data(rx_data)
     );
 
@@ -32,7 +32,7 @@ endmodule
 module uart_rx #(parameter CLK_PER_BIT = 1250) (
     input        clk,
     input        rx,
-    output       o_Rx_DV,
+    output       rx_ready,
     output [7:0] rx_data
 );
     parameter S_IDLE         = 3'b000;
@@ -107,7 +107,7 @@ module uart_rx #(parameter CLK_PER_BIT = 1250) (
             default : r_SM_Main <= S_IDLE;
         endcase
     end
-    assign o_Rx_DV   = r_Rx_DV;
+    assign rx_ready   = r_Rx_DV;
     assign rx_data = r_Rx_Byte;
 endmodule
 
