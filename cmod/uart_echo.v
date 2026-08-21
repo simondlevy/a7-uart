@@ -3,25 +3,26 @@ module uart_echo (
     input RsRx,         // Pin mapped to USB-UART RX
     output RsTx         // Pin mapped to USB-UART TX
 );
-    // Wire up internal RX data and valid signals from a standard UART RX/TX core
-    wire [7:0] rx_byte;
-    wire rx_dv;
 
     // Clock division for 115200 baud from 12 MHz
     // 12MHz / 115200 baud = ~104 cycles per bit
     localparam CLK_PER_BIT = 104;
     
+    // Wire up internal RX data and valid signals from a standard UART RX/TX core
+    wire [7:0] rx_data;
+    wire rx_dv;
+
     uart_rx #(.CLK_PER_BIT(CLK_PER_BIT)) UART_RX_Inst (
         .clk(clk),
         .i_Rx_Serial(RsRx),
         .o_Rx_DV(rx_dv),
-        .o_Rx_Byte(rx_byte)
+        .o_Rx_Byte(rx_data)
     );
 
     uart_tx #(.CLK_PER_BIT(CLK_PER_BIT)) UART_TX_Inst (
         .clk(clk),
         .i_Tx_DV(rx_dv),       // Echo back immediately when data is valid
-        .i_Tx_Byte(rx_byte),
+        .i_Tx_Byte(rx_data),
         .o_Tx_Serial(RsTx),
         .o_Tx_Done()
     );
