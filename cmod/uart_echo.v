@@ -10,18 +10,18 @@ module uart_echo (
     
     // Wire up internal RX data and valid signals from a standard UART RX/TX core
     wire [7:0] rx_data;
-    wire rx_dv;
+    wire rx_ready;
 
     uart_rx #(.CLK_PER_BIT(CLK_PER_BIT)) UART_RX_Inst (
         .clk(clk),
         .rx(RsRx),
-        .o_Rx_DV(rx_dv),
+        .o_Rx_DV(rx_ready),
         .rx_data(rx_data)
     );
 
     uart_tx #(.CLK_PER_BIT(CLK_PER_BIT)) UART_TX_Inst (
         .clk(clk),
-        .i_Tx_DV(rx_dv),       // Echo back immediately when data is valid
+        .i_Tx_DV(rx_ready),       // Echo back immediately when data is valid
         .i_Tx_Byte(rx_data),
         .o_Tx_Serial(RsTx),
         .o_Tx_Done()
