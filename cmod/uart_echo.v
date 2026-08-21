@@ -14,9 +14,9 @@ module uart_echo (
 
     uart_rx #(.CLK_PER_BIT(CLK_PER_BIT)) UART_RX_Inst (
         .clk(clk),
-        .i_Rx_Serial(RsRx),
+        .rx(RsRx),
         .o_Rx_DV(rx_dv),
-        .o_Rx_Byte(rx_data)
+        .rx_data(rx_data)
     );
 
     uart_tx #(.CLK_PER_BIT(CLK_PER_BIT)) UART_TX_Inst (
@@ -31,9 +31,9 @@ endmodule
 // --- UART RECEIVER MODULE ---
 module uart_rx #(parameter CLK_PER_BIT = 1250) (
     input        clk,
-    input        i_Rx_Serial,
+    input        rx,
     output       o_Rx_DV,
-    output [7:0] o_Rx_Byte
+    output [7:0] rx_data
 );
     parameter S_IDLE         = 3'b000;
     parameter STATE_RX_START_BIT = 3'b001;
@@ -50,7 +50,7 @@ module uart_rx #(parameter CLK_PER_BIT = 1250) (
     reg [2:0]  r_SM_Main   = 0;
 
     always @(posedge clk) begin
-        r_Rx_Data_R <= i_Rx_Serial;
+        r_Rx_Data_R <= rx;
         r_Rx_Data   <= r_Rx_Data_R;
     end
 
@@ -108,7 +108,7 @@ module uart_rx #(parameter CLK_PER_BIT = 1250) (
         endcase
     end
     assign o_Rx_DV   = r_Rx_DV;
-    assign o_Rx_Byte = r_Rx_Byte;
+    assign rx_data = r_Rx_Byte;
 endmodule
 
 // --- UART TRANSMITTER MODULE ---
