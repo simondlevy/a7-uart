@@ -1,5 +1,6 @@
 module uart_echo (
     input clk,          // 12MHz clock on Cmod A7 typically, or scaled
+    input  wire btn,   // Reset (Active Low)
     input RsRx,         // Pin mapped to USB-UART RX
     output RsTx         // Pin mapped to USB-UART TX
 );
