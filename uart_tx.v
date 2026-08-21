@@ -1,5 +1,5 @@
-// --- UART TRANSMITTER MODULE ---
 module uart_tx #(parameter CLK_PER_BIT = 868) (
+    // default: 100,000,000 / 115200 = ~868.05
     input  wire       clk,
     input  wire       arstn,
     input  wire       tx_start,

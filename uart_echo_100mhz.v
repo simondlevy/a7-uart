@@ -5,7 +5,6 @@ module uart_echo (
     output wire RsTx   // FPGA TX pin
 );
 
-    // Clock division for 115200 baud from 100 MHz
     // 100,000,000 / 115200 = ~868.05
     localparam CLK_PER_BIT = 868;
 
