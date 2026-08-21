@@ -12,14 +12,14 @@ module uart_echo (
     wire [7:0] rx_data;
     wire rx_ready;
 
-    uart_rx #(.CLK_PER_BIT(CLK_PER_BIT)) UART_RX_Inst (
+    uart_rx #(.CLK_PER_BIT(CLK_PER_BIT)) rx_inst (
         .clk(clk),
         .rx(RsRx),
         .rx_ready(rx_ready),
         .rx_data(rx_data)
     );
 
-    uart_tx #(.CLK_PER_BIT(CLK_PER_BIT)) UART_TX_Inst (
+    uart_tx #(.CLK_PER_BIT(CLK_PER_BIT)) tx_inst (
         .clk(clk),
         .i_Tx_DV(rx_ready),       // Echo back immediately when data is valid
         .tx_data(rx_data),
