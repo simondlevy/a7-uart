@@ -1,8 +1,8 @@
 module uart_echo (
-    input clk,          // 12MHz clock on Cmod A7 typically, or scaled
-    input  wire btn,   // Reset (Active Low)
-    input RsRx,         // Pin mapped to USB-UART RX
-    output RsTx         // Pin mapped to USB-UART TX
+    input wire  clk,  // 12MHz clock on Cmod A7 typically, or scaled
+    input wire  btn,  // Reset (Active Low)
+    input  wire RsRx, // Pin mapped to USB-UART RX
+    output wire RsTx  // Pin mapped to USB-UART TX
 );
 
     // Clock division for 115200 baud from 12 MHz
@@ -32,10 +32,10 @@ endmodule
 
 // --- UART RECEIVER MODULE ---
 module uart_rx #(parameter CLK_PER_BIT = 104) (
-    input        clk,
+    input  wire  clk,
     input  wire  arstn,
-    input        rx,
-    output       rx_ready,
+    input  wire  rx,
+    output wire  rx_ready,
     output [7:0] rx_data
 );
     parameter STATE_IDLE    = 3'b000;
@@ -116,8 +116,8 @@ endmodule
 
 // --- UART TRANSMITTER MODULE ---
 module uart_tx #(parameter CLK_PER_BIT = 104) (
-    input       clk,
-    input       tx_start,
+    input wire  clk,
+    input wire  tx_start,
     input [7:0] tx_data,
     output      tx,
     output      o_Tx_Done

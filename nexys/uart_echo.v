@@ -1,8 +1,8 @@
 module uart_echo (
-    input  wire clk,     // 100 MHz oscillator
+    input  wire clk,   // 100 MHz oscillator
     input  wire btn,   // Reset (Active Low)
-    input  wire RsRx,      // FPGA RX pin (C4)
-    output wire RsTx       // FPGA TX pin (D4)
+    input  wire RsRx,  // FPGA RX pin (C4)
+    output wire RsTx   // FPGA TX pin (D4)
 );
 
     // Clock division for 115200 baud from 100 MHz
