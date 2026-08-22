@@ -9,7 +9,7 @@ VIVADO      := vivado -mode batch -journal $(BUILD_DIR)/vivado.jou -log $(BUILD_
 
 # Find all source files to trace dependencies
 SRCS        := $(wildcard src/*.v) $(wildcard src/*.sv)
-CONSTRAINTS := src/basys3.xdc
+CONSTRAINTS := basys3.xdc
 
 .PHONY: all bitstream clean
 

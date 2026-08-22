@@ -19,7 +19,7 @@ puts "Starting build for Top: $TOP_MODULE, Part: $PART_NUMBER"
 # Add -sv flag for SystemVerilog files if necessary
 foreach file [glob -nocomplain src/*.v]  { read_verilog $file }
 foreach file [glob -nocomplain src/*.sv] { read_verilog -sv $file }
-foreach file [glob -nocomplain src/*.xdc] { read_xdc $file }
+foreach file [glob -nocomplain *.xdc] { read_xdc $file }
 
 # 3. Synthesis
 synth_design -top $TOP_MODULE -part $PART_NUMBER
