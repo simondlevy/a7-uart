@@ -2,13 +2,14 @@
 TOP_MODULE  ?= top
 PART_NUMBER ?= xc7a100ticsg324-1L
 BUILD_DIR   ?= build
+PORT = /dev/ttyUSB1
 
 # Executable definitions
 VIVADO      := vivado -mode batch -journal $(BUILD_DIR)/vivado.jou -log $(BUILD_DIR)/vivado.log
 
 # Find all source files to trace dependencies
 SRCS        := $(wildcard src/*.v) $(wildcard src/*.sv)
-CONSTRAINTS := $(wildcard src/*.xdc)
+CONSTRAINTS := nexys.xdc
 
 .PHONY: all bitstream clean
 
@@ -24,6 +25,9 @@ $(BUILD_DIR)/$(TOP_MODULE).bit: run.tcl $(SRCS) $(CONSTRAINTS)
 
 program: build/$(TOP_MODULE).bit
 	$(VIVADO) -source program.tcl -tclargs $(TOP_MODULE)
+
+test: build/$(TOP_MODULE).bit
+	miniterm.py $(PORT) 115200 --exit-char 3 # exit on CTRL-C
 
 # Clean up build artifacts
 clean:
