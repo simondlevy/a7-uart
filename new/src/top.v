@@ -1,12 +1,12 @@
-module uart_echo (
+module top (
     input  wire clk,   // oscillator
     input  wire btn,   // Reset (Active Low)
-    input  wire RsRx,  // FPGA RX
-    output wire RsTx   // FPGA TX
+    input  wire RsRx,  // FPGA RX pin
+    output wire RsTx   // FPGA TX pin
 );
 
-    // 100,000,000 / 115200 = ~104.05
-    localparam CLK_PER_BIT = 104;
+    // 100,000,000 / 115200 = ~868.05
+    localparam CLK_PER_BIT = 868;
 
     // Internal data signals
     wire [7:0] rx_data;
