@@ -1,4 +1,4 @@
-module top (
+module top_12mhz (
     input  wire clk,   // oscillator
     input  wire btn,   // Reset (Active Low)
     input  wire RsRx,  // FPGA RX pin

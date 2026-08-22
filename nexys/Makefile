@@ -1,5 +1,5 @@
 # Configuration variables
-TOP_MODULE  ?= top
+TOP_MODULE  ?= top_12mhz
 PART_NUMBER ?= xc7a100ticsg324-1L
 BUILD_DIR   ?= build
 PORT = /dev/ttyUSB1
@@ -31,4 +31,4 @@ test: build/$(TOP_MODULE).bit
 
 # Clean up build artifacts
 clean:
-	rm -rf $(BUILD_DIR)
+	rm -rf $(BUILD_DIR) clockInfo.txt
