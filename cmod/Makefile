@@ -19,12 +19,12 @@ all: bitstream
 # Rule to generate the final bitstream
 bitstream: $(BUILD_DIR)/$(TOP_MODULE).bit
 
-$(BUILD_DIR)/$(TOP_MODULE).bit: run.tcl $(SRCS) $(CONSTRAINTS)
+$(BUILD_DIR)/$(TOP_MODULE).bit: ../run.tcl $(SRCS) $(CONSTRAINTS)
 	@mkdir -p $(BUILD_DIR)
-	$(VIVADO) -source run.tcl -tclargs "$(TOP_MODULE)" "$(PART_NUMBER)" "$(BUILD_DIR)"
+	$(VIVADO) -source ../run.tcl -tclargs "$(TOP_MODULE)" "$(PART_NUMBER)" "$(BUILD_DIR)"
 
 program: build/$(TOP_MODULE).bit
-	$(VIVADO) -source program.tcl -tclargs $(TOP_MODULE)
+	$(VIVADO) -source ../program.tcl -tclargs $(TOP_MODULE)
 
 test: build/$(TOP_MODULE).bit
 	miniterm.py $(PORT) 115200 --exit-char 3 # exit on CTRL-C
