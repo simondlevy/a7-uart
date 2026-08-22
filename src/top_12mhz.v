@@ -5,7 +5,7 @@ module top_12mhz (
     output wire RsTx   // FPGA TX
 );
 
-    // 100,000,000 / 115200 = ~104.05
+    // 12,000,000 / 115200 = ~104.05
     localparam CLK_PER_BIT = 104;
 
     // Internal data signals
